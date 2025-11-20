@@ -57,7 +57,7 @@ def create_app(test_config=None) -> Flask:
     from . import models
     from . import examples
     from . import editor
-    from . import shared
+    from . import share
 
     if app.config["SQLALCHEMY_DATABASE_URI"].startswith('sqlite'):
         app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
@@ -83,7 +83,7 @@ def create_app(test_config=None) -> Flask:
 
     app.register_blueprint(editor.bp, url_prefix=f'{url_prefix}/editor')
     app.register_blueprint(examples.bp, url_prefix=f'{url_prefix}/examples')
-    app.register_blueprint(shared.bp, url_prefix=f'{url_prefix}/s')
+    app.register_blueprint(share.bp, url_prefix=f'{url_prefix}/s')
 
     return app
 

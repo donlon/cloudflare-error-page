@@ -132,7 +132,7 @@ params = {
 
 ### Using Flask server
 
-See [flask_server.py](examples/flask_server.py) for embedding the error pages into the server
+See [flask_demo.py](examples/flask_demo.py) for embedding the error pages into the server
 
 
 ## Full Parameter Reference

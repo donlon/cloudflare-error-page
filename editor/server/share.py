@@ -19,7 +19,7 @@ from . import models
 # root_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../')
 # examples_dir = os.path.join(root_dir, 'examples')
 
-bp = Blueprint('shared', __name__, url_prefix='/')
+bp = Blueprint('share', __name__, url_prefix='/')
 
 
 rand_charset = string.ascii_letters + string.digits 
@@ -50,7 +50,7 @@ def create():
     return jsonify({
         'status': 'ok',
         'name': item.name,
-        'url': request.host_url[:-1] + url_for('shared.get', name=item.name),
+        'url': request.host_url[:-1] + url_for('share.get', name=item.name),
         # TODO: better way to handle this
     })
 
