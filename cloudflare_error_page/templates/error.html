@@ -27,7 +27,7 @@
                 <span class="code-label">Error code {{ error_code }}</span>
             </h1>
             {% set more_info = params.more_information or {} %}
-            {% if not more_info.hidden or false %}
+            {% if not more_info.hidden or false %}{# default: shown #}
             <div>
                 Visit <a href="{{more_info.link or 'https://www.cloudflare.com/'}}" target="_blank" rel="noopener noreferrer">{{more_info.text or 'cloudflare.com'}}</a> for more information.
             </div>

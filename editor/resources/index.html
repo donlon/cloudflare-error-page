@@ -139,9 +139,6 @@
           "what_can_i_do": "Visit the site before it crashes someday."
         },
       };
-      if (window.location.search == '') {
-        window.history.pushState('sss', '', '?s');
-      }
 
       function extractUrlParam(str, key) {
         const urlParams = new URLSearchParams(str)

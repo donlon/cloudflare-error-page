@@ -7,7 +7,7 @@
     "cloudflare_status": {
         "status": "error",
         "location": "Everywhere",
-        "status_text": "Not Working"
+        "status_text": "Error"
     },
     "host_status": {
         "status": "error",
