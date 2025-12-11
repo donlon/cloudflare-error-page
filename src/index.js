@@ -274,7 +274,25 @@ function render() {
 
   cfg.time = formatUtcTimestamp();
   cfg.ray_id = '0123456789abcdef';
-  cfg.client_ip = '1.1.1.1';
+  if (!cfg.client_ip) {
+    cfg.client_ip = '1.1.1.1';
+  }
+
+  // Auto-configure client IP if it is the default placeholder
+  if (cfg.client_ip === '1.1.1.1' && !window.fetchedClientIp) {
+    fetch('https://api-mininxd.vercel.app/ip')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.ip) {
+          window.fetchedClientIp = data.ip;
+          render(); // Re-render with fetched IP
+        }
+      })
+      .catch(err => console.error('Failed to fetch client IP:', err));
+  } else if (window.fetchedClientIp && cfg.client_ip === '1.1.1.1') {
+    cfg.client_ip = window.fetchedClientIp;
+  }
+
   if (Number.isNaN(Number(cfg.error_code))) {
     cfg.html_title = cfg.title || 'Internal server error';
   }

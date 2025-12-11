@@ -1,3 +1,0 @@
-Flask
-Flask-Limiter
-Flask-SqlAlchemy
