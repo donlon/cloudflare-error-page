@@ -1,6 +1,6 @@
 {
   // Visit https://aka.ms/tsconfig to read more about this file
-  "include": ["src/**/*.ts"],
+  "include": ["src"],
   "compilerOptions": {
     // File Layout
     // "rootDir": "./src",
@@ -37,7 +37,7 @@
     "jsx": "react-jsx",
     // "verbatimModuleSyntax": true,
     "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
+    // "noUncheckedSideEffectImports": true,
     "moduleResolution": "bundler",
     "moduleDetection": "force",
     "skipLibCheck": true

@@ -1,29 +1,12 @@
-/// <reference types="vite/types/importMeta.d.ts" />
-
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 import { minify as htmlMinify } from 'html-minifier-terser';
-import process from 'node:process';
-
+import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
   const baseUrl = mode === 'production' ? '' : '/editor/';
   return {
-    appType: 'mpa',
-    base: baseUrl,
-    build: {
-      minify: true,
-      sourcemap: true,
-    },
-    server: {
-      port: 3000,
-      proxy: {
-        '/s/': {
-          target: 'http://localhost:5000',
-        },
-      },
-    },
-
     plugins: [
+      react(),
       {
         name: 'html-minifier',
         transformIndexHtml: {
@@ -39,5 +22,19 @@ export default defineConfig(({ mode }) => {
         },
       },
     ],
+    appType: 'mpa',
+    base: baseUrl,
+    build: {
+      minify: true,
+      sourcemap: true,
+    },
+    server: {
+      port: 3000,
+      proxy: {
+        '/s/': {
+          target: 'http://localhost:5000',
+        },
+      },
+    },
   };
 });

@@ -1,6 +1,7 @@
 {
   "name": "cloudflare-error-page-editor",
   "version": "0.0.1",
+  "private": true,
   "license": "MIT",
   "scripts": {
     "dev": "vite",
@@ -10,14 +11,17 @@
     "preview": "npm run build && vite preview"
   },
   "devDependencies": {
-    "@types/node": "^24.10.2",
+    "@types/html-minifier-terser": "^7.0.2",
+    "@vitejs/plugin-react": "^5.1.2",
     "html-minifier-terser": "^7.2.0",
     "prettier": "3.7.4",
     "typescript": "^5.9.3",
-    "vite": "^7.2.6"
+    "vite": "^7.3.0"
   },
   "dependencies": {
     "bootstrap": "^5.3.8",
-    "ejs": "^3.1.10"
+    "ejs": "^3.1.10",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
   }
 }
