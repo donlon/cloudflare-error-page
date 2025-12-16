@@ -1,0 +1,111 @@
+/* Layout: editor + preview */
+.app {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100vh;
+  /* padding: 0.8rem; */
+}
+
+/* On md and up, arrange horizontally: editor left, preview right */
+@media (min-width: 768px) {
+  .app {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .editor {
+    flex: 0 0;
+    min-width: 380px;
+    overflow-y: auto;
+  }
+
+  .preview {
+    flex: 1 1 48%;
+    /* max-width: 48%; */
+    display: flex;
+    flex-direction: column;
+  }
+  iframe.preview-frame {
+    height: 100% !important;
+  }
+}
+
+/* On small screens use stacked layout: editor then iframe */
+.editor {
+  background: #fff;
+  border: 1px solid #e3e6ea;
+  border-radius: 0.5rem;
+  padding: 0.8rem;
+}
+
+.preview {
+  background: #fff;
+  border: 1px solid #e3e6ea;
+  border-radius: 0.5rem;
+  padding: 0.8rem 0 0 0;
+}
+
+/* Compact form: label and control same row */
+.form-row {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.form-row > label {
+  min-width: 6rem;
+  max-width: 12rem;
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+.form-row > .control {
+  flex: 1;
+}
+
+/* Status block styling */
+.status-block {
+  border: 1px solid #cfeadd;
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.status-ok {
+  background: #e9f7ef;
+  border: 1px solid #cfeadd;
+}
+
+.status-error {
+  background: #fff5f5;
+  border: 1px solid #f3c2c2;
+}
+
+/* Iframe styling */
+iframe.preview-frame {
+  --expanded-height: 100%;
+  width: 100%;
+  height: var(--expanded-height);
+  border: 1px solid #ddd;
+  flex: 1 1 auto;
+  min-height: 360px;
+  border-radius: 0.375rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* Controls toolbar */
+.toolbar {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+/* Compact textarea resizing */
+textarea.compact {
+  min-height: 80px;
+  resize: vertical;
+}
