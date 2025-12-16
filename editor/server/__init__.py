@@ -92,9 +92,11 @@ def create_app(test_config=None) -> Flask:
         return '', 204
 
     url_prefix = app.config.get('URL_PREFIX', '')
+    short_share_url = app.config.get('SHORT_SHARE_URL', False)
     app.register_blueprint(editor.bp, url_prefix=f'{url_prefix}/editor')
     app.register_blueprint(examples.bp, url_prefix=f'{url_prefix}/examples')
     app.register_blueprint(share.bp, url_prefix=f'{url_prefix}/s')
+    app.register_blueprint(share.bp_short, url_prefix=f'{url_prefix}' + ('' if short_share_url else '/s'))
 
     return app
 

@@ -6,9 +6,11 @@ import string
 
 from flask import (
     Blueprint,
+    current_app,
     request,
     abort,
     jsonify,
+    redirect,
     url_for,
 )
 from jinja2 import Environment, select_autoescape
@@ -51,6 +53,7 @@ template = env.from_string('''
 ''')
 
 bp = Blueprint('share', __name__, url_prefix='/')
+bp_short = Blueprint('share_short', __name__, url_prefix='/')
 
 
 rand_charset = string.ascii_lowercase + string.digits 
@@ -81,7 +84,8 @@ def create():
     # TODO: strip unused params
     try:
         item = models.Item()
-        item.name = get_rand_name()
+        digits = current_app.config.get('SHARE_LINK_DIGITS', 7)
+        item.name = get_rand_name(digits)
         item.params = params
         db.session.add(item)
         db.session.commit()
@@ -93,12 +97,12 @@ def create():
     return jsonify({
         'status': 'ok',
         'name': item.name,
-        'url': request.host_url[:-1] + url_for('share.get', name=item.name),
+        'url': request.host_url[:-1] + url_for('share_short.get', name=item.name),
         # TODO: better way to handle this
     })
 
 
-@bp.get('/<name>')
+@bp_short.get('/<name>')
 def get(name: str):
     accept = request.headers.get('Accept', '')
     is_json = 'application/json' in accept
@@ -136,3 +140,12 @@ def get(name: str):
                                     base=cf_template,
                                     url=request.url,
                                     description='Cloudflare error page')
+
+
+@bp.get('/<name>')
+def get_redir(name: str):
+    short_share_url = current_app.config.get('SHORT_SHARE_URL', False)
+    if short_share_url:
+        return redirect(f'../{name}', code=308)
+    else:
+        return get(name=name)

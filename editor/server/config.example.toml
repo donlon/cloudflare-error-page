@@ -1,6 +1,12 @@
 # Url prefix for app urls
 URL_PREFIX = ''
 
+# Digits of item name in shared links
+SHARE_LINK_DIGITS = 7
+
+# Use short share url (without '/s' path)
+SHORT_SHARE_URL = false
+
 # Set to true if trust X-Forwarded-For/X-Forwarded-Proto header
 BEHIND_PROXY = true
 
