@@ -35,17 +35,19 @@ def inline_svg_resources(css_file: str, svg_files: list[str], output_file: str):
     write_file(output_file, css_data)
 
 
-def inline_css_resource(original_file: str, css_file: str, output_file: str):
+def inline_assets(original_file: str, css_file: str, js_replacements: dict[str, str], output_file: str):
     css_data = read_file(css_file)
     original_data = read_file(original_file)
-    original_data = original_data.replace('<!-- @INLINE_CSS_HERE@ -->',
-                                          f'<style>{css_data}</style>')
+    original_data = original_data.replace('<!-- @INLINE_CSS_HERE@ -->', f'<style>{css_data}</style>')
+    for placeholder, js_file in js_replacements.items():
+        js_data = read_file(js_file)
+        original_data = original_data.replace(placeholder, f'<script>{js_data}</script>')
     note = 'Note: This file is generated with scripts/inline_resources.py. Please do not edit manually.'
     if original_file.endswith('.ejs'):
         original_data = f'<%# {note} %>\n' + original_data
     else:
         original_data = f'{{# {note} #}}\n' + original_data
-    print(f'inline_css_resource writing to  {output_file}')
+    print(f'inline_assets writing to  {output_file}')
     write_file(output_file, original_data)
 
 
@@ -61,13 +63,22 @@ if __name__ == '__main__':
         ],
         os.path.join(resources_folder, 'styles/main.css'),
         )
-    inline_css_resource(
+    js_map = {'<!-- @INLINE_CLOCK_JS@ -->': os.path.join(resources_folder, 'scripts/clock.js')}
+    inline_assets(
         os.path.join(resources_folder, 'templates/error.html'),
         os.path.join(resources_folder, 'styles/main.css'),
+        js_map,
         os.path.join(root, 'cloudflare_error_page/templates/error.html'),
     )
-    inline_css_resource(
+    inline_assets(
         os.path.join(resources_folder, 'templates/error.ejs'),
         os.path.join(resources_folder, 'styles/main.css'),
+        js_map,
         os.path.join(root, 'editor/web/src/template.ejs'),
+    )
+    inline_assets(
+        os.path.join(resources_folder, 'templates/error.ejs'),
+        os.path.join(resources_folder, 'styles/main.css'),
+        js_map,
+        os.path.join(root, 'nodejs/templates/error.ejs'),
     )

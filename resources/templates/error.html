@@ -30,7 +30,12 @@
                 Visit <a href="{{more_info.link or 'https://www.cloudflare.com/'}}" target="_blank" rel="noopener noreferrer">{{more_info.text or 'cloudflare.com'}}</a> for {{more_info.for or 'more information'}}.
             </div>
             {% endif %}
-            <div class="mt-3">{{ params.time }}</div>
+            <div class="mt-3">
+                <span class="cf-time-static">{{ params.time }}</span>
+                {% if params.show_clock %}
+                <span id="cf-clock" data-format="{{ params.clock_format or 'HH:mm:ss' }}" data-timezone="{{ params.timezone or 'local' }}" aria-live="polite" aria-label="Current time"></span>
+                {% endif %}
+            </div>
         </header>
         <div class="my-8 bg-gradient-gray">
           <div class="w-240 lg:w-full mx-auto">
@@ -110,5 +115,6 @@
     </div>
 </div>
 <script>(function(){function d(){var b=a.getElementById("cf-footer-item-ip"),c=a.getElementById("cf-footer-ip-reveal");b&&"classList"in b&&(b.classList.remove("hidden"),c.addEventListener("click",function(){c.classList.add("hidden");a.getElementById("cf-footer-ip").classList.remove("hidden")}))}var a=document;document.addEventListener&&a.addEventListener("DOMContentLoaded",d)})();</script>
+<!-- @INLINE_CLOCK_JS@ -->
 </body>
 </html>

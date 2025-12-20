@@ -5,10 +5,12 @@
 <!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en-US"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en-US"> <!--<![endif]-->
 <head>
-<% const error_code = params.error_code || 500; %>
-<% const title = params.title || 'Internal server error'; %>
-<% const html_title = params.html_title || (error_code + ': ' + title); %>
-<title><%= html_title %></title>
+<%
+let error_code = params.error_code || 500;
+let title = params.title || 'Internal server error';
+let html_title_output = params.html_title || (error_code + ': ' + title);
+%>
+<title><%= html_title_output %></title>
 <meta charset="UTF-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
@@ -19,38 +21,49 @@
 </head>
 <body>
 <div id="cf-wrapper">
-    <div id="cf-error-details" class="p-0">
+        <div id="cf-error-details" class="p-0">
         <header class="mx-auto pt-10 lg:pt-6 lg:px-8 w-240 lg:w-full mb-8">
             <h1 class="inline-block sm:block sm:mb-2 font-light text-60 lg:text-4xl text-black-dark leading-tight mr-2">
                 <span class="inline-block"><%= title %></span>
                 <span class="code-label">Error code <%= error_code %></span>
             </h1>
-            <% const more_info = params.more_information || {}; %>
+            <% let more_info = params.more_information || {}; %>
             <% if (!more_info.hidden) { %>
             <div>
-                Visit <a href="<%= more_info.link || 'https://www.cloudflare.com/' %>" target="_blank" rel="noopener noreferrer"><%= more_info.text || 'cloudflare.com' %></a> for <%= more_info.for || 'more information' %>.
+                Visit <a href="<%= more_info.link || 'https://www.cloudflare.com/' %>" target="_blank" rel="noopener noreferrer"><%= more_info.text || 'cloudflare.com' %></a> for <%= more_info.for || "more information" %>.
             </div>
             <% } %>
             <div class="<%= more_info.hidden ? '' : 'mt-3' %>">
                 <span class="cf-time-static"><%= params.time %></span>
                 <% if (params.show_clock) { %>
-                <span id="cf-clock" data-format="<%= params.clock_format || 'HH:mm:ss' %>" data-timezone="<%= params.timezone || 'local' %>" aria-live="polite"></span>
+                <span id="cf-clock" data-format="<%= params.clock_format || 'HH:mm:ss' %>" data-timezone="<%= params.timezone || 'local' %>" aria-live="polite" aria-label="Current time"></span>
                 <% } %>
             </div>
         </header>
         <div class="my-8 bg-gradient-gray">
           <div class="w-240 lg:w-full mx-auto">
                 <div class="clearfix md:px-8">
-                <% 
-                const items = [
-                    { id: 'browser', icon: 'browser', default_location: 'You', default_name: 'Browser' },
-                    { id: 'cloudflare', icon: 'cloud', default_location: 'San Francisco', default_name: 'Cloudflare' },
-                    { id: 'host', icon: 'server', default_location: 'Website', default_name: 'Host' }
-                ];
-                items.forEach(({ id, icon, default_location, default_name }) => {
-                    const item = params[id + '_status'] || {};
-                    const status = item.status || 'ok';
-                    let text_color;
+                <% for (let item_id of ['browser', 'cloudflare', 'host']) { %>
+                    <%
+                    let icon, default_location, default_name, text_color, status_text;
+
+                    if (item_id === 'browser') {
+                        icon = 'browser';
+                        default_location = 'You';
+                        default_name = 'Browser';
+                    } else if (item_id === 'cloudflare') {
+                        icon = 'cloud';
+                        default_location = 'San Francisco';
+                        default_name = 'Cloudflare';
+                    } else {
+                        icon = 'server';
+                        default_location = 'Website';
+                        default_name = 'Host';
+                    }
+
+                    let item = params[item_id + '_status'] || {};
+                    let status = item.status || 'ok';
+
                     if (item.status_text_color) {
                         text_color = item.status_text_color;
                     } else if (status === 'ok') {
@@ -58,19 +71,27 @@
                     } else if (status === 'error') {
                         text_color = '#bd2426'; // text-red-error
                     }
-                    const status_text = item.status_text || (status === 'ok' ? 'Working' : 'Error');
-                    const is_error_source = params.error_source === id;
-                %>
-                    <div id="cf-<%= id %>-status" class="<%= is_error_source ? 'cf-error-source' : '' %> relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center">
+
+                    status_text = item.status_text || (status === 'ok' ? 'Working' : 'Error');
+                    %>
+                    <div id="cf-<%= item_id %>-status" class="<% if (params.error_source === item_id) { %>cf-error-source<% } %> relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center">
                         <div class="relative mb-10 md:m-0">
                             <span class="cf-icon-<%= icon %> block md:hidden h-20 bg-center bg-no-repeat"></span>
                             <span class="cf-icon-<%= status %> w-12 h-12 absolute left-1/2 md:left-auto md:right-0 md:top-0 -ml-6 -bottom-4"></span>
                         </div>
                         <span class="md:block w-full truncate"><%= item.location || default_location %></span>
-                        <h3 class="md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3" <%- (item.name || default_name) === 'Cloudflare' ? 'style="color: #2f7bbf;"' : '' %>><%= item.name || default_name %></h3>
+                        <%
+                        let _name_style;
+                        if ((item.name || default_name) === 'Cloudflare') {
+                            _name_style = 'style="color: #2f7bbf;"'
+                        } else{
+                            _name_style = ''
+                        }
+                        %>
+                        <h3 class="md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3" <%-_name_style %>><%= item.name || default_name %></h3>
                         <span class="leading-1.3 text-2xl" style="color: <%= text_color %>"><%= status_text %></span>
                     </div>
-                <% }); %>
+                <% } %>
                 </div>
             </div>
         </div>
@@ -79,11 +100,11 @@
             <div class="clearfix">
                 <div class="w-1/2 md:w-full float-left pr-6 md:pb-10 md:pr-0 leading-relaxed">
                     <h2 class="text-3xl font-normal leading-1.3 mb-4">What happened?</h2>
-                    <%- params.what_happened || '<p>There is an internal server error on Cloudflare\'s network.</p>' %>
+                    <%= (params.what_happened || 'There is an internal server error on Cloudflare\'s network.') %>
                 </div>
                 <div class="w-1/2 md:w-full float-left leading-relaxed">
                     <h2 class="text-3xl font-normal leading-1.3 mb-4">What can I do?</h2>
-                    <%- params.what_can_i_do || '<p>Please try again in a few minutes.</p>' %>
+                    <%= (params.what_can_i_do || 'Please try again in a few minutes.') %>
                 </div>
             </div>
         </div>
@@ -98,49 +119,51 @@
                     <span class="hidden" id="cf-footer-ip"><%= params.client_ip || '1.1.1.1' %></span>
                     <span class="cf-footer-separator sm:hidden">&bull;</span>
                 </span>
-                <% const perf_sec_by = params.perf_sec_by || {}; %>
+                <% let perf_sec_by = params.perf_sec_by || {}; %>
                 <span class="cf-footer-item sm:block sm:mb-1"><span>Performance &amp; security by</span> <a rel="noopener noreferrer" href="<%= perf_sec_by.link || 'https://www.cloudflare.com/' %>" id="brand_link" target="_blank"><%= perf_sec_by.text || 'Cloudflare' %></a></span>
-
-                <% const creator_info = params.creator_info || {}; %>
-                <% if (!(creator_info.hidden ?? true)) { %>
-                <span class="cf-footer-separator sm:hidden">&bull;</span>
-                <span class="cf-footer-item sm:block sm:mb-1">Created with <a href="<%= creator_info.link %>" target="_blank"><%= creator_info.text %></a></span>
-                <% } %>
             </p>
         </div><!-- /.error-footer -->
     </div>
 </div>
-</script>
 <script>(function(){function d(){var b=a.getElementById("cf-footer-item-ip"),c=a.getElementById("cf-footer-ip-reveal");b&&"classList"in b&&(b.classList.remove("hidden"),c.addEventListener("click",function(){c.classList.add("hidden");a.getElementById("cf-footer-ip").classList.remove("hidden")}))}var a=document;document.addEventListener&&a.addEventListener("DOMContentLoaded",d)})();</script>
-<script>
-/* Real-time clock (client-side). Lightweight, respects simple config attributes on #cf-clock */
+<script>/* Real-time clock (client-side). Lightweight, respects simple config attributes on #cf-clock */
 (function(){
-    function pad(n){return n<10?('0'+n):String(n);}
+    function pad(n){return n < 10 ? ('0' + n) : String(n);}
+
+    function is12Hour(fmt){
+        if(!fmt) return false;
+        // treat lowercase 'hh' as 12-hour only when uppercase 'HH' is absent
+        return fmt.indexOf('hh') !== -1 && fmt.indexOf('HH') === -1;
+    }
+
     function formatDate(d, fmt){
         var h = d.getHours(), m = d.getMinutes(), s = d.getSeconds();
-        if(fmt && fmt.toLowerCase().indexOf('hh') !== -1){
+        if(is12Hour(fmt)){
             var ampm = h < 12 ? 'AM' : 'PM';
             var hh = h % 12 || 12;
-            return (('0'+hh).slice(-2)) + ':' + pad(m) + ':' + pad(s) + ' ' + ampm;
+            return (('0' + hh).slice(-2)) + ':' + pad(m) + ':' + pad(s) + ' ' + ampm;
         }
-        return (('0'+h).slice(-2)) + ':' + pad(m) + ':' + pad(s);
+        return (('0' + h).slice(-2)) + ':' + pad(m) + ':' + pad(s);
     }
+
     document.addEventListener && document.addEventListener('DOMContentLoaded', function(){
         var el = document.getElementById('cf-clock');
         if(!el) return;
         var fmt = el.getAttribute('data-format') || 'HH:mm:ss';
         var tz = (el.getAttribute('data-timezone') || 'local').toLowerCase();
+
         function nowForTz(date, tzMode){
             if(tzMode === 'utc'){
-                return new Date(date.getTime() + date.getTimezoneOffset()*60000);
+                return new Date(date.getTime() + date.getTimezoneOffset() * 60000);
             }
             return date;
         }
+
         function update(){
-            var d = new Date();
-            d = nowForTz(d, tz);
+            var d = nowForTz(new Date(), tz);
             el.textContent = formatDate(d, fmt);
         }
+
         update();
         var timer = setInterval(update, 1000);
         window.addEventListener('unload', function(){ clearInterval(timer); });

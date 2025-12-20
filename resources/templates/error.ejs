@@ -31,7 +31,12 @@ let html_title_output = params.html_title || (error_code + ': ' + title);
                 Visit <a href="<%= more_info.link || 'https://www.cloudflare.com/' %>" target="_blank" rel="noopener noreferrer"><%= more_info.text || 'cloudflare.com' %></a> for <%= more_info.for || "more information" %>.
             </div>
             <% } %>
-            <div class="<%= more_info.hidden ? '' : 'mt-3' %>"><%= params.time %></div>
+            <div class="<%= more_info.hidden ? '' : 'mt-3' %>">
+                <span class="cf-time-static"><%= params.time %></span>
+                <% if (params.show_clock) { %>
+                <span id="cf-clock" data-format="<%= params.clock_format || 'HH:mm:ss' %>" data-timezone="<%= params.timezone || 'local' %>" aria-live="polite" aria-label="Current time"></span>
+                <% } %>
+            </div>
         </header>
         <div class="my-8 bg-gradient-gray">
           <div class="w-240 lg:w-full mx-auto">
@@ -119,5 +124,6 @@ let html_title_output = params.html_title || (error_code + ': ' + title);
     </div>
 </div>
 <script>(function(){function d(){var b=a.getElementById("cf-footer-item-ip"),c=a.getElementById("cf-footer-ip-reveal");b&&"classList"in b&&(b.classList.remove("hidden"),c.addEventListener("click",function(){c.classList.add("hidden");a.getElementById("cf-footer-ip").classList.remove("hidden")}))}var a=document;document.addEventListener&&a.addEventListener("DOMContentLoaded",d)})();</script>
+<!-- @INLINE_CLOCK_JS@ -->
 </body>
 </html>
