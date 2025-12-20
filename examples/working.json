@@ -20,4 +20,8 @@
     "error_source": "host",
     "what_happened": "<p>This site is still working. And it looks great.</p>",
     "what_can_i_do": "<p>Visit the site before it crashes someday.</p>"
+    ,
+    "show_clock": true,
+    "clock_format": "HH:mm:ss",
+    "timezone": "local"
 }

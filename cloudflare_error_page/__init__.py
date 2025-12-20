@@ -64,6 +64,9 @@ class ErrorPageParams(TypedDict):
 
     ray_id: NotRequired[str]
     client_ip: NotRequired[str]
+    show_clock: NotRequired[bool]
+    clock_format: NotRequired[str]
+    timezone: NotRequired[str]
 
     perf_sec_by: NotRequired[PerfSecBy]
     creator_info: NotRequired[CreatorInfo]

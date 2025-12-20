@@ -46,6 +46,9 @@ export interface ErrorPageParams {
   host_status?: StatusItem;
 
   error_source?: "browser" | "cloudflare" | "host";
+  show_clock?: boolean;
+  clock_format?: string;
+  timezone?: string;
 
   what_happened?: string;
   what_can_i_do?: string;
