@@ -472,22 +472,30 @@ $('saveAsDialogCopyBtn').addEventListener('click', (e) => {
     }, 2000);
   });
 });
+function toSnakeCase(str, separator = '_') {
+  return str
+    .toLowerCase()
+    .normalize('NFKC')
+    .replace(/[^\p{L}\p{N}]+/gu, '_') // keep letters & numbers from ALL languages
+    .replace(/^_+|_+$/g, '')
+    .replaceAll('_', separator);
+}
+const saveAsExtensions = {
+  js: 'js',
+  json: 'json',
+  python: 'py',
+  static: 'html',
+};
 $('saveAsDialogSaveBtn').addEventListener('click', (e) => {
-  let saveName = '';
+  let name = lastCfg.title || 'Internal server error';
   switch (saveAsType) {
     case 'js':
-      saveName = 'cf-error-page-example.js';
-      break;
-    case 'json':
-      saveName = 'cf-error-page-params.json';
-      break;
     case 'python':
-      saveName = 'cf_error_page_example.py';
+      name += ' example';
       break;
-    case 'static':
-      saveName = 'cf_error_page.html';
-      break;
-    // TODO: name output files using page title
   }
+  const separator = saveAsType == 'python' ? '_' : '-';
+  const ext = saveAsExtensions[saveAsType] ?? txt;
+  const saveName = `${toSnakeCase(name, separator)}.${ext}`;
   saveFile(saveAsContent, saveName);
 });
