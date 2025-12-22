@@ -13,6 +13,8 @@ const paramsArg = JSON.stringify(params, (key, value) => {
     .replace(`"${randomKey}true"`, 'True')
     .replace(`"${randomKey}false"`, 'False')
     .replace(`"${randomKey}null"`, 'None')
+
+const errorCode = params.error_code || 500
 _%>
 from flask import Flask
 from cloudflare_error_page import render as render_cf_error_page
@@ -23,7 +25,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     # Render the error page
-    return render_cf_error_page(<%- paramsArg.replaceAll('\n', '\n    ') %>), 500
+    return render_cf_error_page(<%- paramsArg.replaceAll('\n', '\n    ') %>), <%= /\d{3}/.test(errorCode + '') ? errorCode : 500 %>
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
