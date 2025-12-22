@@ -70,7 +70,7 @@ function genHexString(digits: number): string {
  * Render a customized Cloudflare error page
  * @param params - The parameters for the error page
  * @param allowHtml - Whether to allow HTML in what_happened and what_can_i_do fields (default: true)
- * @param moreArgs - More arguments passed to ejs template
+ * @param moreArgs - More arguments passed to the ejs template
  * @returns The rendered HTML string
  */
 export function render(

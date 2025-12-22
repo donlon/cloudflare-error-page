@@ -66,12 +66,52 @@ You can also see live demo [here](https://virt.moe/cferr/examples/default).
 
 A demo server using Flask is also available in [flask_demo.py](examples/flask_demo.py).
 
-### Node.js/NPM
+### JavaScript/NodeJS
 
-A Node.js package is available in [nodejs](nodejs) folder. However currently it supports only Node.js but not web browsers,
-and we plan to refactor it into a shared package, so it can work in both environments.
+Install the `cloudflare-error-page` package using npm:
 
-(Thanks [@junduck](https://github.com/junduck) for creating this.)
+``` Bash
+npm install cloudflare-error-page
+```
+
+The following example demonstrates how to create a simple Express server and return the error page to visitors.
+
+``` JavaScript
+import express from 'express';
+import { render as render_cf_error_page } from 'cloudflare-error-page';
+
+const app = express();
+const port = 3000;
+
+// Define a route for GET requests to the root URL
+app.get('/', (req, res) => {
+  res.status(500).send(render_cf_error_page({
+    title: "Internal server error",
+    // Browser status is ok
+    browser_status: {
+        status: 'ok',
+    },
+    // Cloudflare status is error
+    cloudflare_status: {
+        status: 'error',
+        status_text: 'Error',
+    },
+    // Host status is also ok
+    host_status: {
+        status: 'ok',
+        location: 'example.com',
+    },
+    error_source: "cloudflare",
+  }));
+});
+
+// Start the server and listen on the specified port
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`);
+});
+```
+
+(Thanks [@junduck](https://github.com/junduck) for creating the original NodeJS version.)
 
 ### PHP
 

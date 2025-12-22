@@ -11,7 +11,7 @@ npm install cloudflare-error-page
 Or install from GitHub:
 
 ```bash
-npm install git+https://github.com/donlon/cloudflare-error-page.git#main:nodejs
+npm install git+https://github.com/donlon/cloudflare-error-page.git#javascriptnodejs
 ```
 
 ## Quick Start
@@ -34,7 +34,7 @@ fs.writeFileSync('error.html', errorPage);
 
 ## API Reference
 
-### `render(params: ErrorPageParams, allowHtml?: boolean): string`
+### `render(params: ErrorPageParams, allowHtml?: boolean, moreArgs?: { [name: string]: any; }): string`
 
 Generates an HTML error page based on the provided parameters.
 
@@ -42,6 +42,7 @@ Generates an HTML error page based on the provided parameters.
 
 - `params`: An object containing error page configuration
 - `allowHtml` (optional): Whether to allow HTML in `what_happened` and `what_can_i_do` fields. Default: `true`
+- `moreArgs` (optional): More arguments passed to the ejs template
 
 #### ErrorPageParams Interface
 
