@@ -49,7 +49,7 @@ Generates an HTML error page based on the provided parameters.
 ```typescript
 interface ErrorPageParams {
   // Basic information
-  error_code?: number;              // Default: 500
+  error_code?: string | number;     // Default: 500
   title?: string;                   // Default: 'Internal server error'
   html_title?: string;              // Default: '{error_code}: {title}'
   time?: string;                    // Auto-generated if not provided

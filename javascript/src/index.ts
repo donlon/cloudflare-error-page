@@ -30,7 +30,7 @@ export interface CreatorInfo {
 }
 
 export interface ErrorPageParams {
-  error_code?: number;
+  error_code?: string | number;
   title?: string;
   html_title?: string;
   time?: string;
