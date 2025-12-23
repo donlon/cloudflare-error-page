@@ -1,14 +1,13 @@
 .vscode/
-
-build/
-*.egg-info/
-__pycache__/
-dist/
-
-node_modules/
+.DS_Store
 
 .venv/
 venv/
-ttt/
+
+node_modules/
+build/
+dist/
+*.egg-info/
+__pycache__/
 
 instance/
