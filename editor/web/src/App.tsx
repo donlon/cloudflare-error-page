@@ -7,7 +7,7 @@ function App() {
     <div className="container-fluid h-100">
       <div className="app">
         <EditorSideBar />
-        <PreviewFrame />
+        <PreviewFrame content='' />
       </div>
     </div>
   );

@@ -284,11 +284,7 @@ function render() {
 
   let pageHtml = renderEjs(cfg);
   // Write into iframe
-  const iframe = $('previewFrame');
-  let doc = iframe.contentDocument;
-  doc.open();
-  doc.write(pageHtml);
-  doc.close();
+  // ## Update iframe
 
   updateStatusBlockStyles();
 
@@ -347,11 +343,6 @@ function exportJSON() {
   document.body.removeChild(link);
   window.URL.revokeObjectURL(url);
 }
-function resizePreviewFrame() {
-  const iframe = $('previewFrame');
-  const height = iframe.contentWindow.document.body.scrollHeight + 2;
-  iframe.style.setProperty('--expanded-height', height + 'px');
-}
 
 /* Update status block colors based on selected status and error_source */
 function updateStatusBlockStyles() {
@@ -407,15 +398,6 @@ $('btnExport').addEventListener('click', (e) => {
   exportJSON();
 });
 
-$('btnCopyLink').addEventListener('click', () => {
-  const field = $('shareLink');
-  field.select();
-  field.setSelectionRange(0, field.value.length);
-  navigator.clipboard.writeText(field.value).then(() => {
-    // No notification required unless you want one
-  });
-});
-
 // Input change -> render
 const inputs = document.querySelectorAll('#editorForm input, #editorForm textarea, #editorForm select');
 inputs.forEach((inp) => {
@@ -433,9 +415,3 @@ inputs.forEach((inp) => {
     });
 });
 
-// Automatically update frame height
-const observer = new ResizeObserver((entries) => resizePreviewFrame());
-const iframe = $('previewFrame');
-observer.observe(iframe.contentWindow.document.body);
-// resizePreviewFrame()
-setInterval(resizePreviewFrame, 1000); // TODO...

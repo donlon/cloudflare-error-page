@@ -1,13 +1,27 @@
-function EditorPresetSelector() {
+import { useId, ChangeEvent } from 'react';
+
+function EditorPresetSelector({
+  presetList,
+  handleSelect,
+}: {
+  presetList: [string, string][];
+  handleSelect: (selected: string) => void;
+}) {
+  const selectId = useId();
+  function handleChange(e: ChangeEvent) {
+    handleSelect((e.target as HTMLSelectElement).value);
+  }
   return (
     <div className="form-row mb-3">
-      <label htmlFor="presetSelect">Preset</label>
-      <select id="presetSelect" className="form-select form-select-sm">
-        <option value="default">Internal server error (Default)</option>
-        <option value="empty">Empty</option>
-        <option value="catastrophic">Catastrophic failure</option>
-        <option value="working">Server working</option>
-        <option value="consensual">Myth of consensual</option>
+      <label htmlFor={selectId}>Preset</label>
+      <select id={selectId} className="form-select form-select-sm" onChange={handleChange}>
+        {presetList.map(([key, name]) => {
+          return (
+            <option value="key" key="key">
+              {name}
+            </option>
+          );
+        })}
       </select>
     </div>
   );
