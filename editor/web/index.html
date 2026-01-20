@@ -514,7 +514,25 @@
   </div>
 
   <!-- Modal -->
-  <div class="modal fade" id="saveAsDialog" tabindex="-1" aria-labelledby="saveAsDialogLabel">
+  <div class="modal fade" id="notOriginalDialog" tabindex="-1" aria-labelledby="notOriginalDialogLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="notOriginalDialogLabel">Beep Boop</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          You're viewing this editor outside its original site. Please open the original page in a new tab for better experience :3
+        </div>
+        <div class="modal-footer">
+          <a type="button" class="btn btn-primary" href="https://virt.moe/cferr/editor" target="_blank">OK</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="saveAsDialog" tabindex="-1" aria-labelledby="saveAsDialogLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-fullscreen-lg-down modal-dialog-scrollable">
       <div class="modal-content h-100">
         <div class="modal-header">

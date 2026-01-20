@@ -5,8 +5,7 @@
   - inputs call render() on change
   - "Open in new tab" opens the rendered HTML in a new window using a blob URL
 */
-
-import 'bootstrap/js/src/modal.js';
+import Modal from 'bootstrap/js/src/modal.js';
 import Popover from 'bootstrap/js/src/popover.js';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-json.js';
@@ -17,6 +16,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'prismjs/themes/prism.css';
 
 import { jsCodeGen, jsonCodeGen, pythonCodeGen } from './codegen';
+
+if (window.top !== window) {
+  new Modal('#notOriginalDialog').show();
+}
 
 // can be changed if specified by '?from=<name>'
 let initialConfig = {
