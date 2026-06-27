@@ -114,6 +114,33 @@
       background: #fff;
     }
 
+    /* On small screens, let both sections expand and the page scroll */
+    @media (max-width: 767.98px) {
+
+      html,
+      body {
+        height: auto;
+      }
+
+      .container-fluid.h-100 {
+        height: auto !important;
+      }
+
+      .app {
+        height: auto;
+      }
+
+      .editor,
+      .preview {
+        overflow: visible;
+      }
+
+      .editor-scroll {
+        height: auto;
+        overflow-y: visible;
+      }
+    }
+
     /* On md and up, arrange horizontally: editor left, preview right */
     @media (min-width: 768px) {
       .app {
